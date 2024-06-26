@@ -1,45 +1,42 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Blog from './pages/Blog';
 import Post from './pages/Post';
 import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import PrivatePages from './middlewares/PrivatePages';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { AuthProvider } from './contexts/AuthContext';
-import { CountProvider } from './contexts/CountContext';
-import PrivatePages from './middlewares/PrivatePages';
-import './App.css';
 
 function App() {
   return (
     <AuthProvider>
-      <CountProvider>
-        <div className="App">
+      <Router>
+        <div className="d-flex flex-column min-vh-100">
           <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/blog"
-              element={
-                <PrivatePages>
-                  <Blog />
-                </PrivatePages>
-              }
-            />
-            <Route
-              path="/post/:id"
-              element={
-                <PrivatePages>
-                  <Post />
-                </PrivatePages>
-              }
-            />
-            <Route path="/login" element={<Login />} />
-          </Routes>
+          <main className="flex-grow-1">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/post/:id" element={<Post />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <PrivatePages>
+                    <Dashboard />
+                  </PrivatePages>
+                }
+              />
+            </Routes>
+          </main>
           <Footer />
         </div>
-      </CountProvider>
+      </Router>
     </AuthProvider>
   );
 }

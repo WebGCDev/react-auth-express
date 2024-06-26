@@ -1,30 +1,25 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import axiosClient from '../api/axiosClient';
 
-const Login = () => {
+const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-  const { handleLogin } = useAuth();
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axiosClient.post('/login', { username, password });
-      handleLogin(response.data.token);
-      navigate('/dashboard');
+      await axiosClient.post('/register', { username, password });
+      setMessage('Registration successful! You can now log in.');
     } catch (error) {
-      setError('Login failed. Please check your credentials.');
+      setMessage('Registration failed. Please try again.');
     }
   };
 
   return (
     <div className="container mt-5">
-      <h2>Login</h2>
-      {error && <p className="text-danger">{error}</p>}
+      <h2>Register</h2>
+      {message && <p>{message}</p>}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="username" className="form-label">
@@ -55,11 +50,11 @@ const Login = () => {
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          Login
+          Register
         </button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Register;
